@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+html,body{margin:0;padding:0;background:#0b0f1e;overflow:hidden}
+a{color:#F9C80E;text-decoration:none}
+a:hover{color:#fff}
+@keyframes ath-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes ath-flash-dot{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes sw-entry{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:.8;transform:translateY(-6px)}}
+@keyframes sw-floor{0%,100%{opacity:.35}50%{opacity:.7}}
+</style>
+</helmet>
+<div style="position:fixed;inset:0;background:#000;overflow:hidden">
+  <div ref="{{ stageRef }}" style="position:absolute;top:0;left:0;width:1920px;height:1080px;transform-origin:top left;overflow:hidden;color:#fff;font-family:'Inter',sans-serif;background:#1A2550" data-screen-label="01 Athletics · SurfaceWare">
+
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg, #1A2550 0%, #2A3C80 50%, #354CA1 100%)"></div>
+    <div style="position:absolute;top:-10%;right:-10%;width:70%;height:120%;background:linear-gradient(135deg, transparent 0%, #CC0035 40%, #CC0035 60%, transparent 100%);transform:skewX(-14deg);opacity:0.18"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;opacity:.08;mix-blend-mode:overlay;background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>&quot;)"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;opacity:.4;background:repeating-linear-gradient(to bottom, transparent 0 2px, rgba(0,0,0,0.1) 2px 3px)"></div>
+
+    <!-- ══ DISPLAY-ONLY · brand header ══ -->
+    <div style="position:absolute;top:0;left:0;right:0;height:90px;display:flex;align-items:center;padding:0 48px;z-index:6;border-bottom:2px solid rgba(255,255,255,0.08);pointer-events:none">
+      <div style="display:flex;align-items:center;gap:16px">
+        <div style="width:64px;height:64px;background:#CC0035;display:flex;align-items:center;justify-content:center;clip-path:polygon(0 0, 100% 0, 100% 100%, 8% 100%)">
+          <span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:32px;color:#fff;letter-spacing:1px">SMU</span>
+        </div>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:28px;letter-spacing:3px;color:#fff;line-height:1">MUSTANGS</div>
+          <div style="font-size:17px;letter-spacing:2px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-top:2px">Athletics · ACC</div>
+        </div>
+      </div>
+      <div style="flex:1"></div>
+      <div style="display:flex;align-items:center;gap:20px;color:rgba(255,255,255,0.7);font-family:'JetBrains Mono',monospace;font-size:17px;letter-spacing:1px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:10px;height:10px;border-radius:5px;background:#22c55e;animation:ath-flash-dot 1.4s infinite"></div>
+          LIVE · FORD STADIUM LOBBY
+        </div>
+        <div>·</div>
+        <div ref="{{ clockRef }}">12:00:00 PM</div>
+        <div>·</div>
+        <div style="letter-spacing:2px">SURFACEWARE · WALL 4K</div>
+      </div>
+    </div>
+
+    <!-- ══ DISPLAY-ONLY · reader ══ -->
+    <div style="position:absolute;top:90px;left:120px;right:120px;height:218px;z-index:5;pointer-events:none;padding-top:22px;display:grid;grid-template-columns:1fr 520px;gap:56px">
+      <div style="min-width:0">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+          <div style="padding:7px 16px;background:#F9C80E;color:#262626;font-size:16px;font-weight:800;letter-spacing:2px">{{ reader.chip }}</div>
+          <div style="color:rgba(255,255,255,0.85);font-family:'JetBrains Mono',monospace;font-size:17px;letter-spacing:1px;font-weight:500">{{ reader.tag }}</div>
+        </div>
+        <h2 style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:78px;line-height:0.9;letter-spacing:-1px;text-transform:uppercase;margin:0;color:#fff">{{ reader.headline }}</h2>
+        <p style="font-size:20px;line-height:1.4;color:rgba(255,255,255,0.82);margin:14px 0 0;max-width:920px">{{ reader.lede }}</p>
+      </div>
+      <div style="display:flex;gap:28px;align-items:flex-start;justify-content:flex-end">
+        <sc-if value="{{ reader.hasMedia }}" hint-placeholder-val="{{ false }}">
+          <div role="img" style="{{ reader.mediaStyle }}"></div>
+        </sc-if>
+        <div style="display:grid;gap:12px;align-content:start;flex:1;min-width:0">
+          <sc-for list="{{ reader.rows }}" as="r" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:16px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.18);align-items:baseline">
+              <div style="font-size:13px;letter-spacing:2px;color:rgba(255,255,255,0.65);font-weight:600;text-transform:uppercase;white-space:nowrap">{{ r.k }}</div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:24px;letter-spacing:1px;text-align:right">{{ r.v }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="position:absolute;top:308px;left:120px;right:120px;height:64px;z-index:5;pointer-events:none;display:flex;align-items:center;gap:22px">
+      <div style="font-size:15px;letter-spacing:3px;color:rgba(255,255,255,0.7);text-transform:uppercase;font-weight:600">Next kickoff · SMU @ FSU · in</div>
+      <div style="display:flex;gap:12px;font-family:'Barlow Condensed',sans-serif">
+        <sc-for list="{{ countdown }}" as="u" hint-placeholder-count="4">
+          <div style="display:flex;align-items:baseline;gap:7px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);padding:5px 14px">
+            <div style="font-size:30px;font-weight:900;color:#fff;line-height:1;font-variant-numeric:tabular-nums">{{ u.v }}</div>
+            <div style="font-size:13px;letter-spacing:2px;color:rgba(255,255,255,0.7);font-weight:600">{{ u.l }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="flex:1"></div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.45)">Display-only zone</div>
+    </div>
+    <div style="position:absolute;top:388px;left:120px;right:120px;height:1px;background:rgba(255,255,255,0.16);z-index:5"></div>
+
+    <!-- ══ PRIMARY INTERACTION ZONE ══ -->
+    <div style="position:absolute;left:320px;top:502px;width:1280px;height:420px;transform:translateY(-50px);z-index:8">
+      <div style="{{ guideStyle }}">
+        <div style="position:absolute;inset:-40px;border:1px dashed rgba(122,214,168,.4);pointer-events:none"></div>
+        <div style="position:absolute;left:-40px;top:-40px;width:34px;height:3px;background:#7AD6A8;pointer-events:none"></div>
+        <div style="position:absolute;left:-40px;top:-40px;width:3px;height:34px;background:#7AD6A8;pointer-events:none"></div>
+        <div style="position:absolute;right:-40px;bottom:-40px;width:34px;height:3px;background:#7AD6A8;pointer-events:none"></div>
+        <div style="position:absolute;right:-40px;bottom:-40px;width:3px;height:34px;background:#7AD6A8;pointer-events:none"></div>
+        <div style="position:absolute;left:-40px;top:-72px;display:flex;align-items:center;gap:14px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.28em;text-transform:uppercase;color:#7AD6A8;pointer-events:none">
+          <span style="width:9px;height:9px;border-radius:50%;background:#7AD6A8"></span>Primary interaction zone · waist–chest
+        </div>
+        <div style="position:absolute;right:-40px;top:-72px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.45);pointer-events:none">Dwell 350 ms · 40 px padding</div>
+      </div>
+
+      <div style="position:absolute;inset:0;background:rgba(4,10,30,.72);border:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;padding:28px;gap:28px">
+
+        <div style="display:grid;grid-template-columns:300px repeat(5, 1fr);gap:28px;height:100px;flex-shrink:0">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <button onClick="{{ navBack }}" aria-label="Back" style="{{ backStyle }}">
+              <svg viewBox="0 0 24 24" fill="none" style="width:30px;height:30px"><path d="M19 12H5M11 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              Back
+            </button>
+            <a href="SMU Welcome (SurfaceWare).dc.html" aria-label="Menu" style="width:88px;height:88px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:#CC0035;color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:13px;letter-spacing:2px;text-transform:uppercase;box-shadow:0 6px 0 rgba(0,0,0,.5);cursor:pointer;text-decoration:none" style-hover="background:#a8002c;color:#fff">
+              <svg viewBox="0 0 24 24" fill="none" style="width:30px;height:30px"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path></svg>
+              Menu
+            </a>
+            <button onClick="{{ navFwd }}" aria-label="Forward" style="{{ fwdStyle }}">
+              <svg viewBox="0 0 24 24" fill="none" style="width:30px;height:30px"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              Fwd
+            </button>
+          </div>
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+            <button data-kind="tab" data-id="{{ t.id }}" onMouseEnter="{{ enter }}" onMouseLeave="{{ leave }}" onClick="{{ tap }}" style="{{ t.style }}">
+              <span style="font-size:13px;letter-spacing:3px;opacity:.7">{{ t.num }}</span>
+              <span style="font-size:27px;letter-spacing:1px">{{ t.label }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <div style="flex:1;display:grid;gap:28px;min-height:0;{{ cardsGrid }}">
+          <sc-for list="{{ cards }}" as="c" hint-placeholder-count="6">
+            <button data-kind="card" data-id="{{ c.id }}" onMouseEnter="{{ enter }}" onMouseLeave="{{ leave }}" onClick="{{ tap }}" style="{{ c.style }}">
+              <div style="{{ c.badgeStyle }}">{{ c.badge }}</div>
+              <sc-if value="{{ c.hasPhoto }}" hint-placeholder-val="{{ false }}">
+                <div role="img" style="{{ c.photoStyle }}"></div>
+              </sc-if>
+              <div style="{{ c.titleStyle }}">{{ c.title }}</div>
+              <div style="{{ c.metaStyle }}">{{ c.meta }}</div>
+              <div style="{{ c.dwellStyle }}"></div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="position:absolute;left:0;right:0;bottom:-58px;display:flex;align-items:center;justify-content:center;gap:28px;pointer-events:none">
+        <sc-for list="{{ chevrons }}" as="ch" hint-placeholder-count="7">
+          <svg width="26" height="16" viewBox="0 0 26 16" fill="none" style="{{ ch.style }}"><path d="M2 14 L13 3 L24 14" stroke="#7AD6A8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </sc-for>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.3em;text-transform:uppercase;color:#7AD6A8;opacity:.8">Hand entry</span>
+      </div>
+    </div>
+
+    <!-- ══ DISPLAY-ONLY · floor anchor + ticker ══ -->
+    <div style="position:absolute;left:0;right:0;bottom:0;height:170px;pointer-events:none;z-index:5">
+      <div style="position:absolute;left:50%;bottom:80px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px">
+        <div style="width:300px;height:42px;border-radius:50%;border:2px solid rgba(122,214,168,.5);box-shadow:inset 0 0 40px rgba(122,214,168,.16);animation:sw-floor 3s ease-in-out infinite"></div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.32em;text-transform:uppercase;color:#7AD6A8;opacity:.85">Stand here · 1.5 m · sweet spot</div>
+      </div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:56px;background:#262626;border-top:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;overflow:hidden">
+        <div style="flex-shrink:0;padding:0 20px;height:100%;background:#CC0035;z-index:2;display:flex;align-items:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;letter-spacing:2px;font-size:20px">MUSTANG NEWS</div>
+        <div style="flex:1;height:100%;overflow:hidden;position:relative;display:flex;align-items:center">
+          <div style="display:flex;gap:48px;white-space:nowrap;animation:ath-marquee 40s linear infinite;font-family:'JetBrains Mono',monospace;font-size:19px;color:#fff;padding-left:32px;font-weight:500">
+            <span>Holiday Bowl Champions · SMU 42, Arizona 35</span>
+            <span>Lashlee signs extension through 2030</span>
+            <span>Kevin Jennings named preseason All-ACC</span>
+            <span>Season tickets on sale — SMU Box Office</span>
+            <span>2026 home slate: 7 games at Ford Stadium</span>
+            <span>Holiday Bowl Champions · SMU 42, Arizona 35</span>
+            <span>Lashlee signs extension through 2030</span>
+            <span>Kevin Jennings named preseason All-ACC</span>
+            <span>Season tickets on sale — SMU Box Office</span>
+            <span>2026 home slate: 7 games at Ford Stadium</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1920,&quot;height&quot;:1080},&quot;showZoneGuides&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;SurfaceWare&quot;}}">
+const DWELL_MS = 350;
+const NEXT_ISO = '2026-09-07T23:00:00Z';
+const RD = (k,v) => ({k:k,v:v});
+
+const RAW_SCHEDULE = [
+  { date:'MON SEP 7', opp:'at Florida State', loc:'Tallahassee', tv:'ESPN', ha:'A' },
+  { date:'SAT SEP 12', opp:'UC Davis', loc:'Ford Stadium', tv:'ACCN', ha:'H' },
+  { date:'SAT SEP 19', opp:'at Louisville', loc:'Louisville', tv:'TBD', ha:'A' },
+  { date:'SAT SEP 26', opp:'Missouri State', loc:'Ford Stadium', tv:'TBD', ha:'H' },
+  { date:'SAT OCT 3',  opp:'Boston College', loc:'Ford Stadium', tv:'TBD', ha:'H' },
+  { date:'SAT OCT 17', opp:'Virginia', loc:'Ford Stadium', tv:'TBD', ha:'H' },
+  { date:'SAT OCT 24', opp:'California', loc:'Ford Stadium', tv:'TBD', ha:'H' },
+  { date:'SAT OCT 31', opp:'at Syracuse', loc:'Syracuse', tv:'TBD', ha:'A' },
+  { date:'SAT NOV 7',  opp:'Virginia Tech', loc:'Ford Stadium', tv:'TBD', ha:'H' },
+  { date:'SAT NOV 14', opp:'Wake Forest', loc:'Ford Stadium', tv:'TBD', ha:'H' },
+  { date:'SAT NOV 21', opp:'at Notre Dame', loc:'South Bend', tv:'NBC', ha:'A' },
+  { date:'SAT NOV 28', opp:'at Stanford', loc:'Stanford, CA', tv:'TBD', ha:'A' }
+];
+
+const SHORT = {
+  'Florida State':'FSU', 'Missouri State':'MO State', 'Boston College':'BC',
+  'Virginia Tech':'VA Tech', 'Wake Forest':'Wake', 'Notre Dame':'Notre Dame'
+};
+
+const SCHEDULE = RAW_SCHEDULE.map((g, i) => {
+  const home = g.ha === 'H';
+  const opp = g.opp.replace('at ', '');
+  return {
+    id: 'g' + i, badge: home ? '● HOME' : '○ AWAY', title: SHORT[opp] || opp,
+    meta: g.date.replace('SAT ','').replace('MON ','') + ' · ' + g.tv,
+    chip: 'GAME ' + String(i+1).padStart(2,'0') + ' / 12',
+    tag: g.date + ' · ' + (home ? 'HOME' : 'AWAY') + ' · ' + g.tv,
+    headline: (home ? 'Mustangs vs ' : 'Mustangs at ') + opp,
+    lede: home ? 'Pack Ford Stadium and Pony Up with 32,000 Mustang faithful. Gates open two hours before kickoff; the Boulevard starts four hours out.'
+               : 'Follow the Mustangs on the road — watch on ' + g.tv + '. Away-watch parties run at the Hughes-Trigg student center for every road game.',
+    rows: [ RD('Venue', home ? 'Ford Stadium' : g.loc), RD('Network', g.tv), RD('Kickoff','TBA'), RD('Tickets','Scan at Tickets tab') ]
+  };
+});
+
+const RAW_PLAYERS = [
+  { num:7,  name:'Kevin Jennings',    pos:'QB', yr:'RS SR', home:'Oak Cliff, TX' },
+  { num:8,  name:'Yamir Knight',      pos:'WR', yr:'SR',    home:'Smyrna, DE' },
+  { num:50, name:'Graham Uter',       pos:'OL', yr:'RS SO', home:'Daphne, AL' },
+  { num:59, name:'PJ Williams',       pos:'OL', yr:'RS SR', home:'Dickinson, TX' },
+  { num:29, name:'Brandon Miyazono',  pos:'LB', yr:'SR',    home:'Frisco, TX' },
+  { num:54, name:'Alexander Kilgore', pos:'LB', yr:'SR',    home:'Katy, TX' }
+];
+
+const PLAYERS = RAW_PLAYERS.map(p => ({
+  id: 'p' + p.num, badge: '#' + p.num, title: p.name.split(' ')[1] || p.name,
+  meta: p.pos + ' · ' + p.yr, photo: 'assets/p' + p.num + '.png',
+  chip: '#' + p.num + ' · ' + p.pos, tag: p.yr + ' · ' + p.home,
+  headline: p.name, media: 'assets/p' + p.num + '.png',
+  lede: 'A ' + p.yr + ' ' + p.pos + ' out of ' + p.home + ', part of the group that closed 2025 on a five-game run and took the Holiday Bowl.',
+  rows: [ RD('Position', p.pos), RD('Class', p.yr), RD('Hometown', p.home), RD('Number','#' + p.num) ]
+}));
+
+const GAMEDAY = [
+  { id:'gd-1', badge:'VENUE', title:'Ford Stadium', meta:'32,000 · Dallas',
+    chip:'HOME OF THE MUSTANGS', tag:'GERALD J. FORD STADIUM', headline:'Gerald J. Ford Stadium',
+    lede:'The Mustangs have played on the Hilltop since 2000. Thirty-two thousand seats, a stone façade cut to match Dallas Hall, and the loudest north end zone in the ACC.',
+    rows:[RD('Capacity','32,000'),RD('City','Dallas, TX'),RD('Opened','2000'),RD('Surface','Natural grass')] },
+  { id:'gd-2', badge:'PREGAME', title:'The Boulevard', meta:'4 hrs before kick',
+    chip:'PREGAME TRADITION', tag:'THE BOULEVARD', headline:'The Boulevard',
+    lede:'Tailgating on the main quad, four hours before kickoff. Tents down the length of Bishop Boulevard, the band through the middle, and the team walk an hour out.',
+    rows:[RD('Opens','4 hrs pre-kick'),RD('Where','Bishop Boulevard'),RD('Team walk','60 min pre-kick'),RD('Cost','Free')] },
+  { id:'gd-3', badge:'STUDENTS', title:'The Stampede', meta:'Student section',
+    chip:'STUDENT SECTION', tag:'THE STAMPEDE', headline:'The Stampede',
+    lede:'Student section, north end zone. Be loud, stay loud. Students enter free with an SMU ID and the first thousand through the gate get the gameday shirt.',
+    rows:[RD('Location','North end zone'),RD('Entry','Free with SMU ID'),RD('Gates','2 hrs pre-kick'),RD('Rule','Stay standing')] }
+];
+
+const STATS = [
+  { id:'s-1', badge:'RECORD', title:'11-3', meta:'Finished #16 CFP',
+    chip:'2025 SEASON', tag:'FINAL RECORD', headline:'11-3 and ranked 16th',
+    lede:'The Mustangs closed 2025 with eleven wins, a top-twenty CFP finish and the best defensive third-down rate in the conference.',
+    rows:[RD('Record','11-3'),RD('CFP finish','#16'),RD('Home','6-1'),RD('Road','5-2')] },
+  { id:'s-2', badge:'ACC', title:'7-1', meta:'Runner-up',
+    chip:'2025 SEASON', tag:'CONFERENCE', headline:'7-1 in the ACC',
+    lede:'One loss in conference play and a trip to the ACC championship game in only the second season as a member.',
+    rows:[RD('ACC record','7-1'),RD('Finish','Runner-up'),RD('Title game','Charlotte'),RD('Year in ACC','2nd')] },
+  { id:'s-3', badge:'BOWL', title:'Champs', meta:'Holiday Bowl',
+    chip:'POSTSEASON', tag:'HOLIDAY BOWL', headline:'Holiday Bowl champions',
+    lede:'SMU 42, Arizona 35 in San Diego — the program\u2019s first New Year\u2019s-window bowl title since joining the ACC.',
+    rows:[RD('Result','SMU 42 · ARI 35'),RD('Site','San Diego'),RD('MVP','Kevin Jennings'),RD('Bowl','Holiday')] },
+  { id:'s-4', badge:'STREAK', title:'W5', meta:'To close season',
+    chip:'MOMENTUM', tag:'CLOSING STREAK', headline:'Five straight to finish',
+    lede:'Best closing run in the ACC — five consecutive wins carried the Mustangs from November into the bowl title.',
+    rows:[RD('Streak','5 wins'),RD('Margin','+17 avg'),RD('Rank in ACC','1st'),RD('Last loss','Oct 2025')] }
+];
+
+const TICKETS = [
+  { id:'tk-1', badge:'SEASON', title:'Season Tickets', meta:'7 home games',
+    chip:'SMU BOX OFFICE', tag:'SCAN TO BUY · SEASON', headline:'Scan to buy season tickets', qr:true,
+    lede:'Point your phone camera at the code on the right. It opens the official SMU ticket office — seven home dates at Ford Stadium, students free with ID.',
+    rows:[RD('Home games','7'),RD('Venue','Ford Stadium'),RD('Students','Free with ID'),RD('Site','smumustangs.evenue.net')] },
+  { id:'tk-2', badge:'SINGLE', title:'Single Game', meta:'Pick a date',
+    chip:'SMU BOX OFFICE', tag:'SCAN TO BUY · SINGLE GAME', headline:'Scan to buy single-game seats', qr:true,
+    lede:'Single-game seats for any 2026 home date. Scan the code, choose your game, and the pass drops straight into your phone wallet.',
+    rows:[RD('Availability','All home dates'),RD('Delivery','Mobile wallet'),RD('Group rates','10+ seats'),RD('Site','smumustangs.evenue.net')] },
+  { id:'tk-3', badge:'BOULEVARD', title:'Tailgate Pass', meta:'Bishop Blvd',
+    chip:'GAMEDAY EXPERIENCE', tag:'SCAN TO RESERVE · TAILGATE', headline:'Reserve a Boulevard tent', qr:true,
+    lede:'Tent space on Bishop Boulevard for the full home slate. Scan to reserve — space is released to the public six weeks before the opener.',
+    rows:[RD('Where','Bishop Boulevard'),RD('Opens','4 hrs pre-kick'),RD('Release','6 wks pre-opener'),RD('Site','smumustangs.evenue.net')] }
+];
+
+const SECTIONS = {
+  schedule: { num:'01', label:'Schedule', items:SCHEDULE, cols:6, rows:2, dense:true },
+  roster:   { num:'02', label:'The Team', items:PLAYERS,  cols:6, rows:1 },
+  gameday:  { num:'03', label:'Gameday',  items:GAMEDAY,  cols:3, rows:1 },
+  stats:    { num:'04', label:'2025',     items:STATS,    cols:4, rows:1 },
+  tickets:  { num:'05', label:'Tickets',  items:TICKETS,  cols:3, rows:1 }
+};
+const ORDER = ['schedule','roster','gameday','stats','tickets'];
+
+function navBtn(on){
+  return "width:88px;height:88px;border-radius:50%;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:13px;letter-spacing:2px;text-transform:uppercase;box-shadow:0 6px 0 rgba(0,0,0,.5);transition:background .16s, opacity .16s;" +
+    (on ? 'background:#fff;color:#1A2550;cursor:pointer;opacity:1;'
+        : 'background:rgba(255,255,255,.1);color:rgba(255,255,255,.4);cursor:default;opacity:.55;');
+}
+
+class Component extends DCLogic {
+  state = { section:'schedule', itemId:'g0', hot:null, pct:0, t:this.compute(), hist:[{section:'schedule',itemId:'g0'}], hi:0 };
+  constructor(p){ super(p); this.stageRef = React.createRef(); this.clockRef = React.createRef(); }
+  compute(){
+    const diff = Math.max(0, new Date(NEXT_ISO).getTime() - Date.now());
+    return { days: Math.floor(diff/86400000), hours: Math.floor((diff%86400000)/3600000),
+      mins: Math.floor((diff%3600000)/60000), secs: Math.floor((diff%60000)/1000) };
+  }
+  fit = () => {
+    const el = this.stageRef.current; if(!el) return;
+    const s = Math.min(window.innerWidth/1920, window.innerHeight/1080);
+    el.style.transform = 'translate(' + ((window.innerWidth - 1920*s)/2) + 'px,' + ((window.innerHeight - 1080*s)/2) + 'px) scale(' + s + ')';
+  };
+  componentDidMount(){
+    this.fit(); window.addEventListener('resize', this.fit);
+    this._c = setInterval(() => {
+      this.setState({ t: this.compute() });
+      if (this.clockRef.current) this.clockRef.current.textContent = new Date().toLocaleTimeString();
+    }, 1000);
+  }
+  componentWillUnmount(){ window.removeEventListener('resize', this.fit); clearInterval(this._c); cancelAnimationFrame(this._raf); }
+  commit(kind, id){
+    const next = kind === 'tab'
+      ? { section:id, itemId:SECTIONS[id].items[0].id }
+      : { section:this.state.section, itemId:id };
+    this.setState(s => {
+      const cur = s.hist[s.hi];
+      if (cur && cur.section === next.section && cur.itemId === next.itemId) return { hot:null, pct:0 };
+      const hist = s.hist.slice(0, s.hi + 1).concat([next]).slice(-24);
+      return { section:next.section, itemId:next.itemId, hot:null, pct:0, hist:hist, hi:hist.length - 1 };
+    });
+  }
+  jump(delta){
+    this.setState(s => {
+      const hi = s.hi + delta;
+      if (hi < 0 || hi >= s.hist.length) return null;
+      const e = s.hist[hi];
+      return { hi:hi, section:e.section, itemId:e.itemId, hot:null, pct:0 };
+    });
+  }
+  begin(kind, id){
+    cancelAnimationFrame(this._raf);
+    this.setState({ hot:id, pct:0 });
+    const t0 = performance.now();
+    const step = () => {
+      const pct = Math.min(1, (performance.now() - t0) / DWELL_MS);
+      if (pct < 1) { this.setState({ pct:pct }); this._raf = requestAnimationFrame(step); }
+      else this.commit(kind, id);
+    };
+    this._raf = requestAnimationFrame(step);
+  }
+  renderVals(){
+    const s = this.state, t = s.t;
+    const sec = SECTIONS[s.section];
+    const item = sec.items.find(i => i.id === s.itemId) || sec.items[0];
+    const media = item.qr ? 'assets/ticketsQr.png' : (item.media || '');
+    return {
+      stageRef: this.stageRef, clockRef: this.clockRef,
+      guideStyle: (this.props.showZoneGuides ?? true) ? 'position:absolute;inset:0;pointer-events:none' : 'display:none',
+      backStyle: navBtn(s.hi > 0),
+      fwdStyle: navBtn(s.hi < s.hist.length - 1),
+      navBack: () => this.jump(-1),
+      navFwd: () => this.jump(1),
+      reader: {
+        chip: item.chip, tag: item.tag, headline: item.headline, lede: item.lede, rows: item.rows,
+        media: media, hasMedia: !!media,
+        mediaStyle: media
+          ? (item.qr
+              ? 'width:200px;height:200px;flex-shrink:0;overflow:hidden;background-color:#fff;background-image:url(' + media + ');background-size:contain;background-position:center;background-repeat:no-repeat;box-shadow:0 0 0 6px #fff, 0 0 0 9px #CC0035'
+              : 'width:180px;height:222px;flex-shrink:0;overflow:hidden;border:4px solid #CC0035;background-color:#1A2550;background-image:url(' + media + ');background-size:cover;background-position:center top;background-repeat:no-repeat')
+          : 'display:none'
+      },
+      countdown: [ {l:'DAYS', v:String(t.days).padStart(2,'0')}, {l:'HRS', v:String(t.hours).padStart(2,'0')},
+                   {l:'MIN', v:String(t.mins).padStart(2,'0')}, {l:'SEC', v:String(t.secs).padStart(2,'0')} ],
+      tabs: ORDER.map(k => {
+        const on = k === s.section, hot = s.hot === k;
+        return { id:k, num:SECTIONS[k].num, label:SECTIONS[k].label.toUpperCase(),
+          style: "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;transition:transform .18s, background .18s;" +
+            (on ? 'background:#fff;color:#1A2550;box-shadow:0 6px 0 #CC0035;transform:translateY(-4px);'
+                : hot ? 'background:rgba(255,255,255,.24);color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.5);transform:translateY(-4px);'
+                      : 'background:rgba(255,255,255,.08);color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.5);') };
+      }),
+      cardsGrid: 'grid-template-columns:repeat(' + sec.cols + ', 1fr);grid-template-rows:repeat(' + sec.rows + ', 1fr)',
+      cards: sec.items.map(it => {
+        const on = it.id === s.itemId, hot = s.hot === it.id;
+        return {
+          id: it.id, badge: it.badge, title: it.title, meta: it.meta, photo: it.photo || '', hasPhoto: !!it.photo,
+          style: 'position:relative;overflow:hidden;border:none;cursor:pointer;text-align:left;display:flex;flex-direction:column;min-height:80px;font-family:inherit;transition:transform .2s, box-shadow .2s;' +
+            (sec.dense ? 'padding:12px 16px;gap:3px;' : 'padding:16px 18px;gap:8px;') +
+            (on ? 'background:#CC0035;color:#fff;box-shadow:0 10px 0 rgba(0,0,0,.55), 0 0 0 3px rgba(122,214,168,.9);transform:translateY(-8px);'
+                : hot ? 'background:rgba(255,255,255,.22);color:#fff;box-shadow:0 10px 0 rgba(0,0,0,.55), 0 0 0 2px rgba(122,214,168,.75);transform:translateY(-8px);'
+                      : 'background:rgba(255,255,255,.08);color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.45);'),
+          badgeStyle: "font-family:'JetBrains Mono',monospace;letter-spacing:1.4px;font-weight:600;font-size:" + (sec.dense ? '17px' : '18px') + ';color:' + (on ? 'rgba(255,255,255,.95)' : 'rgba(255,255,255,.75)'),
+          photoStyle: it.photo ? 'width:100%;height:104px;flex:none;overflow:hidden;background-color:#1A2550;background-image:url(' + it.photo + ');background-size:cover;background-position:center 22%;background-repeat:no-repeat' : 'display:none',
+          titleStyle: "font-family:'Barlow Condensed',sans-serif;font-weight:900;line-height:1.15;text-transform:uppercase;margin-top:auto;color:#fff;font-size:" + (sec.dense ? '29px' : '32px'),
+          metaStyle: 'line-height:1.2;font-weight:500;font-size:' + (sec.dense ? '18px' : '19px') + ';color:' + (on ? 'rgba(255,255,255,.95)' : 'rgba(255,255,255,.8)'),
+          dwellStyle: (hot && s.pct < 1)
+            ? 'position:absolute;left:0;bottom:0;height:6px;background:#7AD6A8;width:' + Math.round(s.pct*100) + '%'
+            : 'display:none'
+        };
+      }),
+      chevrons: [0,1,2,3,4,5,6].map(i => ({ style:'animation:sw-entry 2.4s ease-in-out infinite ' + (i*120) + 'ms' })),
+      enter: (e) => this.begin(e.currentTarget.dataset.kind, e.currentTarget.dataset.id),
+      leave: () => { cancelAnimationFrame(this._raf); this.setState({ hot:null, pct:0 }); },
+      tap: (e) => { cancelAnimationFrame(this._raf); this.commit(e.currentTarget.dataset.kind, e.currentTarget.dataset.id); }
+    };
+  }
+}
+</script>
+</body>
+</html>

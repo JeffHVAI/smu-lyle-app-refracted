@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+<style>
+html,body{margin:0;padding:0;background:#000;overflow:hidden;height:100%}
+a{color:#C8102E;text-decoration:none}
+a:hover{color:#8F0A21}
+@keyframes lyle-pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}50%{box-shadow:0 0 0 10px rgba(255,255,255,0)}}
+@keyframes sw-entry{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:.8;transform:translateY(-6px)}}
+@keyframes sw-floor{0%,100%{opacity:.35}50%{opacity:.7}}
+</style>
+</helmet>
+<div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000">
+  <div ref="{{ stageRef }}" style="position:absolute;width:1920px;height:1080px;background:#F6F4EE;transform-origin:top left;overflow:hidden;color:#0A0F2C;font-family:'Inter',system-ui,sans-serif" data-screen-label="01 Lyle Kiosk · SurfaceWare">
+
+    <div style="position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.8;background-image:radial-gradient(rgba(10,15,44,0.025) 1px, transparent 1px),radial-gradient(rgba(10,15,44,0.02) 1px, transparent 1px);background-size:3px 3px, 7px 7px;background-position:0 0, 1px 2px"></div>
+
+    <!-- ══ DISPLAY-ONLY · brand header ══ -->
+    <div style="position:absolute;top:0;left:0;right:0;height:88px;background:#C8102E;color:#fff;display:flex;align-items:center;padding:0 48px;z-index:20;box-shadow:0 6px 0 #0A0F2C;pointer-events:none">
+      <div style="display:flex;align-items:center;gap:20px;min-width:0;flex:1">
+        <svg width="68" height="48" viewBox="0 0 68 48" aria-hidden="true">
+          <g fill="#fff"><path d="M4 44 L4 4 L14 4 L22 28 L30 4 L40 4 L40 44 L32 44 L32 16 L24 40 L20 40 L12 16 L12 44 Z"></path></g>
+          <text x="46" y="20" font-family="Oswald,sans-serif" font-weight="700" font-size="14" fill="#fff" letter-spacing="1">EST</text>
+          <text x="46" y="38" font-family="Oswald,sans-serif" font-weight="700" font-size="14" fill="#fff" letter-spacing="1">1911</text>
+        </svg>
+        <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:36px;letter-spacing:0.02em;line-height:1;white-space:nowrap">SMU LYLE</div>
+        <div style="font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;letter-spacing:0.14em;line-height:1;padding-left:18px;margin-left:2px;text-transform:uppercase;color:#C8102E;white-space:nowrap;position:relative;text-shadow:0 1px 0 rgba(0,0,0,0.15)">
+          <span style="position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:22px;background:rgba(255,255,255,0.55)"></span>School of Engineering · Dallas, TX</div>
+      </div>
+      <div style="margin-left:auto;font-family:'Oswald',sans-serif;font-weight:500;font-size:20px;letter-spacing:0.16em;display:flex;align-items:center;gap:14px;white-space:nowrap;flex-shrink:0">
+        <span style="width:10px;height:10px;background:#fff;border-radius:50%;animation:lyle-pulse 2s infinite"></span>
+        <span ref="{{ clockRef }}">LIVE · FRIDAY · 2:34 PM</span>
+      </div>
+    </div>
+
+    <!-- ══ DISPLAY-ONLY · reader (the selected item, rendered large) ══ -->
+    <div style="position:absolute;top:88px;left:120px;right:120px;height:266px;z-index:10;pointer-events:none;display:grid;grid-template-columns:1fr 460px;gap:56px;padding-top:24px">
+      <div style="min-width:0">
+        <div style="font-family:'Oswald',sans-serif;font-weight:600;font-size:16px;letter-spacing:0.32em;text-transform:uppercase;color:#C8102E;margin-bottom:10px">{{ reader.tag }}</div>
+        <h2 style="font-family:'Oswald',sans-serif;font-weight:700;font-size:60px;line-height:0.94;letter-spacing:-0.015em;text-transform:uppercase;margin:0;color:#0A0F2C">{{ reader.title }}</h2>
+        <p style="font-family:'Source Serif 4',serif;font-size:19px;line-height:1.38;color:rgba(10,15,44,0.78);margin:12px 0 0;max-width:960px">{{ reader.lede }}</p>
+      </div>
+      <div style="display:flex;gap:24px;align-items:flex-start;justify-content:flex-end">
+        <sc-if value="{{ reader.hasPhoto }}" hint-placeholder-val="{{ false }}">
+          <div role="img" style="{{ reader.photoWrapStyle }}"></div>
+        </sc-if>
+        <div style="display:grid;gap:10px;align-content:start;min-width:0;flex:1">
+          <sc-for list="{{ reader.rows }}" as="r" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:14px;padding-bottom:9px;border-bottom:1px solid rgba(10,15,44,0.14);align-items:baseline">
+              <div style="font-family:'Oswald',sans-serif;font-weight:600;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#C8102E;white-space:nowrap">{{ r.k }}</div>
+              <div style="font-family:'Source Serif 4',serif;font-size:16px;color:#0A0F2C;text-align:right">{{ r.v }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="position:absolute;top:372px;left:120px;right:120px;height:1px;background:rgba(10,15,44,0.18);z-index:10"></div>
+
+    <!-- ══ PRIMARY INTERACTION ZONE ══ -->
+    <div style="position:absolute;left:320px;top:500px;width:1280px;height:420px;transform:translateY(-50px);z-index:12">
+      <div style="{{ guideStyle }}">
+        <div style="position:absolute;inset:-40px;border:1px dashed rgba(31,138,90,.45);pointer-events:none"></div>
+        <div style="position:absolute;left:-40px;top:-40px;width:34px;height:3px;background:#1F8A5A;pointer-events:none"></div>
+        <div style="position:absolute;left:-40px;top:-40px;width:3px;height:34px;background:#1F8A5A;pointer-events:none"></div>
+        <div style="position:absolute;right:-40px;bottom:-40px;width:34px;height:3px;background:#1F8A5A;pointer-events:none"></div>
+        <div style="position:absolute;right:-40px;bottom:-40px;width:3px;height:34px;background:#1F8A5A;pointer-events:none"></div>
+        <div style="position:absolute;left:-40px;top:-72px;display:flex;align-items:center;gap:14px;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:#1F8A5A;pointer-events:none">
+          <span style="width:9px;height:9px;border-radius:50%;background:#1F8A5A"></span>Primary interaction zone · waist–chest
+        </div>
+        <div style="position:absolute;right:-40px;top:-72px;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:rgba(10,15,44,.42);pointer-events:none">Dwell 350 ms · 40 px padding</div>
+      </div>
+
+      <div style="position:absolute;inset:0;background:#0A0F2C;display:flex;flex-direction:column;padding:28px;gap:28px">
+
+        <div style="display:grid;grid-template-columns:300px repeat(4, 1fr);gap:28px;height:104px;flex-shrink:0">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <button onClick="{{ navBack }}" aria-label="Back" style="{{ backStyle }}">
+              <svg viewBox="0 0 24 24" fill="none" style="width:30px;height:30px"><path d="M19 12H5M11 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              Back
+            </button>
+            <a href="SMU Welcome (SurfaceWare).dc.html" aria-label="Menu" style="width:88px;height:88px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:#C8102E;color:#fff;font-family:'Oswald',sans-serif;font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;box-shadow:0 6px 0 rgba(0,0,0,.45);cursor:pointer;text-decoration:none" style-hover="background:#8F0A21;color:#fff">
+              <svg viewBox="0 0 24 24" fill="none" style="width:30px;height:30px"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path></svg>
+              Menu
+            </a>
+            <button onClick="{{ navFwd }}" aria-label="Forward" style="{{ fwdStyle }}">
+              <svg viewBox="0 0 24 24" fill="none" style="width:30px;height:30px"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              Fwd
+            </button>
+          </div>
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+            <button data-kind="tab" data-id="{{ t.id }}" onMouseEnter="{{ enter }}" onMouseLeave="{{ leave }}" onClick="{{ tap }}" style="{{ t.style }}">
+              <span style="font-size:13px;letter-spacing:.28em;opacity:.72">{{ t.num }}</span>
+              <span style="font-size:26px;letter-spacing:.12em">{{ t.label }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <div style="flex:1;display:grid;gap:28px;min-height:0;{{ cardsGrid }}">
+          <sc-for list="{{ cards }}" as="c" hint-placeholder-count="4">
+            <button data-kind="card" data-id="{{ c.id }}" onMouseEnter="{{ enter }}" onMouseLeave="{{ leave }}" onClick="{{ tap }}" style="{{ c.style }}">
+              <div style="{{ c.badgeStyle }}">{{ c.badge }}</div>
+              <sc-if value="{{ c.hasPhoto }}" hint-placeholder-val="{{ false }}">
+                <div role="img" style="{{ c.photoStyle }}"></div>
+              </sc-if>
+              <div style="{{ c.titleStyle }}">{{ c.title }}</div>
+              <div style="{{ c.metaStyle }}">{{ c.meta }}</div>
+              <div style="{{ c.dwellStyle }}"></div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="position:absolute;left:0;right:0;bottom:-58px;display:flex;align-items:center;justify-content:center;gap:28px;pointer-events:none">
+        <sc-for list="{{ chevrons }}" as="ch" hint-placeholder-count="7">
+          <svg width="26" height="16" viewBox="0 0 26 16" fill="none" style="{{ ch.style }}"><path d="M2 14 L13 3 L24 14" stroke="#1F8A5A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </sc-for>
+        <span style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:#1F8A5A;opacity:.8">Hand entry</span>
+      </div>
+    </div>
+
+    <!-- ══ DISPLAY-ONLY · floor anchor + footer ══ -->
+    <div style="position:absolute;left:0;right:0;bottom:0;height:170px;pointer-events:none;z-index:10">
+      <div style="position:absolute;left:50%;bottom:78px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px">
+        <div style="width:300px;height:42px;border-radius:50%;border:2px solid rgba(31,138,90,.5);box-shadow:inset 0 0 40px rgba(31,138,90,.14);animation:sw-floor 3s ease-in-out infinite"></div>
+        <div style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:#1F8A5A;opacity:.85">Stand here · 1.5 m · sweet spot</div>
+      </div>
+      <div style="position:absolute;bottom:0;left:0;right:0;height:64px;background:#0A0F2C;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 48px;font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:0.18em;font-size:16px;text-transform:uppercase">
+        <div><span style="color:#C8102E;font-weight:700">SMU LYLE</span> &nbsp;·&nbsp; Bobby B. Lyle School of Engineering</div>
+        <div style="opacity:0.9"><em style="font-family:'Source Serif 4',serif;font-style:italic;letter-spacing:0;font-size:18px;text-transform:none;color:#fff;font-weight:400">"Think Big. Do Good."</em></div>
+        <div>Pony Up · SurfaceWare Runtime</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1920,&quot;height&quot;:1080},&quot;showZoneGuides&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;SurfaceWare&quot;}}">
+const DWELL_MS = 350;
+const RD = (k,v) => ({k:k,v:v});
+
+const NEWS = [
+  { id:'news-1', badge:'FEATURED', title:'Lyle + AECOM', meta:'April 2026 · Industry',
+    tag:'INDUSTRY · APRIL 2026', headline:'Lyle & AECOM train the next AI infrastructure leaders',
+    lede:"A landmark collaboration pairs SMU Lyle faculty with AECOM — one of the world's largest infrastructure firms — to develop curriculum, capstone projects and research tracks for the engineers who will design AI-native bridges, grids and water systems.",
+    rows:[RD('Partners','SMU Lyle × AECOM'),RD('Focus','AI-native infrastructure'),RD('Lead','Civil & Environmental'),RD('Status','Kickoff · Fall 2026')] },
+  { id:'news-2', badge:'APR 17', title:"Brianna Navarro '24", meta:'Alumni · Bell Flight',
+    tag:'ALUMNI · APRIL 17', headline:'Alumna Brianna Navarro rises at Bell Flight',
+    lede:'ME grad and Bell Flight defense engineer on how lifting others shaped her path to success — and what she tells the next generation of Mustang engineers about showing up ready.',
+    rows:[RD('Degree',"BS Mechanical Eng. '24"),RD('Employer','Bell Flight'),RD('Focus','Defense Engineering'),RD('Quote','"Lift others."')] },
+  { id:'news-3', badge:'APR 09', title:'Minsker · ASCE', meta:'Faculty honor',
+    tag:'FACULTY · APRIL 9', headline:'Minsker named ASCE Distinguished Member',
+    lede:"Lyle's chair of Civil & Environmental Engineering joins ASCE's highest honor for four decades of water-systems research spanning machine learning, public health and infrastructure resilience.",
+    rows:[RD('Department','Civil & Environmental'),RD('Honor','Distinguished Member'),RD('Field','Water · Resilience'),RD('Announced','April 9, 2026')] },
+  { id:'news-4', badge:'MAR 28', title:'14 new faculty', meta:"Dean's office",
+    tag:"DEAN'S OFFICE · MARCH 28", headline:'14 new faculty hired in two years',
+    lede:"Dean Jalili's cluster-hiring plan has seated 14 new faculty and reshaped Lyle's research footprint — with 10 more hires underway for 2026–27 focused on AI, advanced manufacturing and cybersecurity.",
+    rows:[RD('Hires to date','14 faculty'),RD('Next wave','10 · 2026–27'),RD('Focus','AI · Mfg · Cyber'),RD('Funding','Templeton $20M')] },
+  { id:'news-5', badge:'CENTENNIAL', title:'100 years', meta:'Hilltop since 1925',
+    tag:'CENTENNIAL · 1925–2025', headline:'A century of engineering on the Hilltop',
+    lede:'One hundred years after the first engineering degree was conferred on the Hilltop, Lyle marks its centennial with a year of lectures, lab openings and an alumni homecoming built around the people who shaped Dallas.',
+    rows:[RD('Founded','1925'),RD('Alumni','20,000+'),RD('Programs','6 departments'),RD('Celebration','All year 2026')] }
+];
+
+const EVENTS = [
+  { id:'ev-1', badge:'APR 27', title:'Awards', meta:'Caruth Hall · 5 PM',
+    tag:'DEADLINE · APR 27', headline:'Lyle Awards & Scholarships',
+    lede:'Last call for nominations across undergraduate, graduate and faculty recognition programs. Students, faculty and staff may nominate themselves or a peer through the Lyle portal.',
+    rows:[RD('Closes','April 27 · 11:59 PM'),RD('Location','Caruth Hall'),RD('Categories','Student · Faculty'),RD('Submit','engineering.smu.edu')] },
+  { id:'ev-2', badge:'MAY 10', title:'IEEE DCAS', meta:'Embrey · 3 days',
+    tag:'IEEE DCAS · MAY 10–12', headline:'IEEE DCAS 2026 · Dallas Circuits & Systems',
+    lede:'The Dallas Circuits and Systems Conference returns to the Hilltop for three days — 200+ researchers, 60+ paper sessions and a student design competition co-hosted with Lyle ECE.',
+    rows:[RD('Dates','May 10 – 12, 2026'),RD('Host','Lyle ECE + IEEE'),RD('Venue','J. Lindsay Embrey'),RD('Expected','200+ researchers')] },
+  { id:'ev-3', badge:'MAY 01', title:'HI-TIE', meta:'Hart Center · Free',
+    tag:'DEMO DAY · MAY 1', headline:'HI-TIE Spring Showcase',
+    lede:'Joint Lyle + Cox venture teams pitch commercializable research to a live audience of industry partners, investors and alumni. Twelve teams. Ten minutes each. One $25K prototype grant.',
+    rows:[RD('Date','May 1 · 1–5 PM'),RD('Venue','Hart Center'),RD('Teams','12 ventures'),RD('Prize','$25K grant')] },
+  { id:'ev-4', badge:'MAY 17', title:'Rocketry', meta:'Live at noon',
+    tag:'LAUNCH · MAY 17', headline:'Mustang Rocketry · Pegasus',
+    lede:'Student team Mustang Rocketry attempts a certified 10,000-foot altitude shot with Pegasus, a two-stage solid-motor vehicle built in the Caruth makerspace over the spring semester.',
+    rows:[RD('Launch','May 17 · 12 PM CT'),RD('Site','Spaceport America'),RD('Vehicle','2-stage · 14 ft'),RD('Goal','10,000 ft')] },
+  { id:'ev-5', badge:'MAY 22', title:'Lecture', meta:'Junkins · 6 PM',
+    tag:'LECTURE · MAY 22', headline:'Templeton Distinguished Lecture',
+    lede:'Dean Nader Jalili on "Human-Augmented Manufacturing and the Next Industrial Decade" — how digital twins, AR and AI are redrawing what factories look like, and what Lyle engineers will do inside them.',
+    rows:[RD('Speaker','Dean Nader Jalili'),RD('Date','May 22 · 6 PM'),RD('Venue','Junkins Auditorium'),RD('Free','RSVP required')] },
+  { id:'ev-6', badge:'MAY 30', title:'Grad Day', meta:'Moody · 10 AM',
+    tag:'COMMENCEMENT · MAY 30', headline:'Lyle Commencement 2026',
+    lede:"Celebrating the Class of '26 — 612 engineers ready to pony up for their first big problems. Dean Jalili confers degrees across mechanical, civil, environmental, electrical, computer and operations-research engineering.",
+    rows:[RD('Date','May 30 · 10 AM'),RD('Venue','Moody Coliseum'),RD('Graduates','612 engineers'),RD('Speaker','TBA')] }
+];
+
+const LEADERS = [
+  { id:'nj', photo:'assets/leadNj.png', badge:'DEAN', title:'Nader Jalili', meta:"Dean's Office",
+    tag:'MARY AND RICHARD TEMPLETON DEAN', headline:'Nader Jalili, PhD',
+    lede:'"Through digital innovation and a modular paradigm in both teaching and research, Lyle is not just shaping the future — it is molding the future of engineering." ASME Fellow · vibration, control & robotics pioneer.',
+    rows:[RD('Since','2023'),RD('Funding','$17M+ external'),RD('Publications','350+'),RD('Faculty hired','14')] },
+  { id:'ab', photo:'assets/leadAb.png', badge:'RESEARCH', title:'Ali Beskok', meta:'Mechanical Eng.',
+    tag:'ASSOCIATE DEAN · RESEARCH INNOVATION', headline:'Ali Beskok, PhD',
+    lede:'"Lyle\u2019s research strategy is built on partnerships — with industry, with government, and across disciplines inside the school." George R. Brown Chair in Mechanical Engineering.',
+    rows:[RD('Papers','200+ micro/nanofluidics'),RD('Career','30 years'),RD('Also','Caruth Institute'),RD('Dept','Mechanical Eng.')] },
+  { id:'dr', photo:'assets/leadDr.png', badge:'ACADEMICS', title:'Dinesh Rajan', meta:'ECE',
+    tag:'ASSOCIATE DEAN · ACADEMIC AFFAIRS', headline:'Dinesh Rajan, PhD',
+    lede:'"A modular curriculum lets our faculty pivot into emerging engineering areas without rebuilding the core — students get both fundamentals and the frontier." Professor of Electrical & Computer Engineering.',
+    rows:[RD('Pillars','5 curriculum cores'),RD('Dept','ECE'),RD('IEEE','Senior member'),RD('Focus','Curriculum innovation')] },
+  { id:'bz', photo:'assets/leadBz.png', badge:'INDUSTRY', title:'Zoghi', meta:'Hart Center',
+    tag:'ASSOCIATE DEAN · INDUSTRY PARTNERSHIPS', headline:'Behrouz Zoghi, PhD',
+    lede:'"The Hart Center pairs elite technical education with leadership and professional development — that\u2019s how you produce world-changing engineers." Executive Director, Hart Center for Engineering Leadership.',
+    rows:[RD('Center','Hart Leadership'),RD('Chair','Bobby B. Lyle'),RD('Partners','50+ industry'),RD('Dept','ECE')] },
+  { id:'bm', photo:'assets/leadBm.png', badge:'CHAIR', title:'Minsker', meta:'Civil & Env.',
+    tag:'CHAIR · CIVIL & ENVIRONMENTAL ENGINEERING', headline:'Barbara Minsker, PhD',
+    lede:'"Our infrastructure has to be intelligent and resilient — AI-native water, grid and transport systems are already the job." Bobby B. Lyle Endowed Chair in Smart, Sustainable & Resilient Infrastructure.',
+    rows:[RD('ASCE','Distinguished Member'),RD('Research','40 yr water systems'),RD('Partner','AECOM'),RD('Dept','Civil & Env.')] }
+];
+
+const RESEARCH = [
+  { id:'r-1', badge:'FLAGSHIP', title:'Microrobots', meta:'Mechanical Eng.',
+    tag:'FLAGSHIP RESEARCH', headline:'Magnetic microrobots swim through blood',
+    lede:"Dr. Minjun Kim's Bio-Micro-Nano-Fluidics Laboratory designs Lab-on-a-Chip devices and magnetically actuated microswimmers — bioinspired machines smaller than a grain of sand that navigate blood and deliver payloads to single cells.",
+    rows:[RD('PI','Dr. Minjun Kim'),RD('Lab','Bio-Micro-Nano'),RD('Use','Drug delivery'),RD('Dept','Mechanical Eng.')] },
+  { id:'r-2', badge:'5,000 SQ FT', title:'Manufacturing', meta:'Embrey Building',
+    tag:'NEW CENTER', headline:'Digital & human-augmented manufacturing',
+    lede:'A 5,000-square-foot center inside the J. Lindsay Embrey Building exploring how digital modeling, simulation, AR, robotics, automation and AI will redraw the boundaries of manufacturing.',
+    rows:[RD('Footprint','5,000 sq. ft.'),RD('Building','J. Lindsay Embrey'),RD('Opened','Late 2024'),RD('Pillars','Twins · AR · AI')] },
+  { id:'r-3', badge:'CYBER', title:'Deason Institute', meta:'Cybersecurity',
+    tag:'CYBERSECURITY', headline:'Darwin Deason Institute for Cyber Security',
+    lede:"Advancing the science, policy, application and education of cybersecurity through basic and problem-driven, interdisciplinary research — Lyle's flagship cyber institute at the intersection of engineering, law and policy.",
+    rows:[RD('Focus','Science · Policy'),RD('Approach','Interdisciplinary'),RD('Partners','Industry + Gov'),RD('Reach','National')] },
+  { id:'r-4', badge:'LEADERSHIP', title:'Hart Center', meta:'All Lyle students',
+    tag:'LEADERSHIP', headline:'Hart Center for Engineering Leadership',
+    lede:'Pairs elite technical education with exceptional leadership and professional development skills to produce world-changing engineers — mentorship, entrepreneurship and industry immersion built into the Lyle core.',
+    rows:[RD('Mission','Leadership + Eng.'),RD('Programs','Mentorship'),RD('Director','Behrouz Zoghi'),RD('Since','2014')] },
+  { id:'r-5', badge:'VENTURES', title:'HI-TIE', meta:'Lyle × Cox',
+    tag:'COMMERCIALIZATION', headline:'HI-TIE · Lyle × Cox',
+    lede:'A partnership between Lyle and the Cox School of Business that blends engineering and business students to produce and commercialize new technologies, innovations and research — with a live demo day every spring.',
+    rows:[RD('Partners','Lyle × Cox'),RD('Cadence','Annual Demo Day'),RD('Mission','Commercialize'),RD('Teams','12 per year')] }
+];
+
+const SECTIONS = {
+  news:     { num:'01', label:'News',       items:NEWS },
+  events:   { num:'02', label:'Events',     items:EVENTS },
+  leaders:  { num:'03', label:'Leadership', items:LEADERS },
+  research: { num:'04', label:'Research',   items:RESEARCH }
+};
+const ORDER = ['news','events','leaders','research'];
+
+function navBtn(on){
+  return "width:88px;height:88px;border-radius:50%;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-family:'Oswald',sans-serif;font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;box-shadow:0 6px 0 rgba(0,0,0,.45);transition:background .16s, opacity .16s;" +
+    (on ? 'background:#fff;color:#0A0F2C;cursor:pointer;opacity:1;'
+        : 'background:rgba(255,255,255,.12);color:rgba(255,255,255,.4);cursor:default;opacity:.55;');
+}
+
+class Component extends DCLogic {
+  state = { section:'news', itemId:'news-1', hot:null, pct:0, hist:[{section:'news',itemId:'news-1'}], hi:0 };
+  constructor(p){ super(p); this.stageRef = React.createRef(); this.clockRef = React.createRef(); }
+  fit = () => {
+    const el = this.stageRef.current; if(!el) return;
+    const s = Math.min(window.innerWidth/1920, window.innerHeight/1080);
+    el.style.transform = 'scale(' + s + ')';
+    el.style.left = ((window.innerWidth - 1920*s)/2) + 'px';
+    el.style.top = ((window.innerHeight - 1080*s)/2) + 'px';
+  };
+  tick = () => {
+    const el = this.clockRef.current; if(!el) return;
+    const d = new Date(); const days = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+    let h = d.getHours(); const m = d.getMinutes(); const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    el.textContent = 'LIVE · ' + days[d.getDay()] + ' · ' + h + ':' + (m<10?'0':'') + m + ' ' + ampm;
+  };
+  componentDidMount(){ this.fit(); window.addEventListener('resize', this.fit); this.tick(); this._c = setInterval(this.tick, 30000); }
+  componentDidUpdate(){ this.fit(); }
+  componentWillUnmount(){ window.removeEventListener('resize', this.fit); clearInterval(this._c); cancelAnimationFrame(this._raf); }
+  commit(kind, id){
+    const next = kind === 'tab'
+      ? { section:id, itemId: SECTIONS[id].items[0].id }
+      : { section:this.state.section, itemId:id };
+    this.setState(s => {
+      const cur = s.hist[s.hi];
+      if (cur && cur.section === next.section && cur.itemId === next.itemId) return { hot:null, pct:0 };
+      const hist = s.hist.slice(0, s.hi + 1).concat([next]).slice(-24);
+      return { section:next.section, itemId:next.itemId, hot:null, pct:0, hist:hist, hi:hist.length - 1 };
+    });
+  }
+  jump(delta){
+    this.setState(s => {
+      const hi = s.hi + delta;
+      if (hi < 0 || hi >= s.hist.length) return null;
+      const e = s.hist[hi];
+      return { hi:hi, section:e.section, itemId:e.itemId, hot:null, pct:0 };
+    });
+  }
+  begin(kind, id){
+    cancelAnimationFrame(this._raf);
+    this.setState({ hot:id, pct:0 });
+    const t0 = performance.now();
+    const step = () => {
+      const pct = Math.min(1, (performance.now() - t0) / DWELL_MS);
+      if (pct < 1) { this.setState({ pct:pct }); this._raf = requestAnimationFrame(step); }
+      else this.commit(kind, id);
+    };
+    this._raf = requestAnimationFrame(step);
+  }
+  renderVals(){
+    const s = this.state;
+    const sec = SECTIONS[s.section];
+    const item = sec.items.find(i => i.id === s.itemId) || sec.items[0];
+    const n = sec.items.length;
+    return {
+      stageRef: this.stageRef, clockRef: this.clockRef,
+      guideStyle: (this.props.showZoneGuides ?? true) ? 'position:absolute;inset:0;pointer-events:none' : 'display:none',
+      backStyle: navBtn(s.hi > 0),
+      fwdStyle: navBtn(s.hi < s.hist.length - 1),
+      navBack: () => this.jump(-1),
+      navFwd: () => this.jump(1),
+      reader: {
+        tag: item.tag, title: item.headline, lede: item.lede, rows: item.rows,
+        photo: item.photo || '', hasPhoto: !!item.photo,
+        photoWrapStyle: item.photo
+          ? 'width:180px;height:224px;flex-shrink:0;overflow:hidden;border:4px solid #C8102E;background-color:#0A0F2C;background-image:url(' + item.photo + ');background-size:cover;background-position:center top;background-repeat:no-repeat'
+          : 'display:none'
+      },
+      tabs: ORDER.map(k => {
+        const on = k === s.section, hot = s.hot === k;
+        return { id:k, num:SECTIONS[k].num, label:SECTIONS[k].label.toUpperCase(),
+          style: "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:none;cursor:pointer;font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;position:relative;transition:transform .18s, background .18s;" +
+            (on ? 'background:#fff;color:#0A0F2C;box-shadow:0 6px 0 #C8102E;transform:translateY(-4px);'
+                : hot ? 'background:rgba(255,255,255,.22);color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.45);transform:translateY(-4px);'
+                      : 'background:rgba(255,255,255,.1);color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.45);') };
+      }),
+      cardsGrid: 'grid-template-columns:repeat(' + n + ', 1fr)',
+      cards: sec.items.map(it => {
+        const on = it.id === s.itemId, hot = s.hot === it.id;
+        const fg = on ? '#fff' : '#0A0F2C';
+        const dense = n >= 6;
+        return {
+          id: it.id, badge: it.badge, title: it.title, meta: it.meta, photo: it.photo || '', hasPhoto: !!it.photo,
+          style: 'position:relative;overflow:hidden;border:none;cursor:pointer;text-align:left;display:flex;flex-direction:column;min-height:80px;font-family:inherit;transition:transform .2s, box-shadow .2s;' +
+            (dense ? 'padding:16px;gap:7px;' : 'padding:22px;gap:10px;') +
+            (on ? 'background:#C8102E;box-shadow:0 10px 0 rgba(0,0,0,.5), 0 0 0 3px rgba(31,138,90,.9);transform:translateY(-8px);'
+                : hot ? 'background:#fff;box-shadow:0 10px 0 rgba(0,0,0,.5), 0 0 0 2px rgba(31,138,90,.7);transform:translateY(-8px);'
+                      : 'background:#F6F4EE;box-shadow:0 6px 0 rgba(0,0,0,.4);'),
+          badgeStyle: "font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-size:" + (dense ? '16px' : '17px') + ';color:' + (on ? 'rgba(255,255,255,.9)' : '#C8102E'),
+          photoStyle: it.photo
+            ? 'width:100%;height:' + (dense ? 92 : 76) + 'px;flex:none;overflow:hidden;background-color:#0A0F2C;background-image:url(' + it.photo + ');background-size:cover;background-position:center 22%;background-repeat:no-repeat'
+            : 'display:none',
+          titleStyle: "font-family:'Oswald',sans-serif;font-weight:700;line-height:1.2;text-transform:uppercase;margin-top:auto;font-size:" + (dense ? '25px' : '28px') + ';color:' + fg,
+          metaStyle: "font-family:'Source Serif 4',serif;line-height:1.25;font-size:" + (dense ? '17px' : '18px') + ';color:' + (on ? 'rgba(255,255,255,.92)' : 'rgba(10,15,44,.78)'),
+          dwellStyle: (hot && s.pct < 1)
+            ? 'position:absolute;left:0;bottom:0;height:6px;background:#1F8A5A;width:' + Math.round(s.pct*100) + '%'
+            : 'display:none'
+        };
+      }),
+      chevrons: [0,1,2,3,4,5,6].map(i => ({ style:'animation:sw-entry 2.4s ease-in-out infinite ' + (i*120) + 'ms' })),
+      enter: (e) => this.begin(e.currentTarget.dataset.kind, e.currentTarget.dataset.id),
+      leave: () => { cancelAnimationFrame(this._raf); this.setState({ hot:null, pct:0 }); },
+      tap: (e) => { cancelAnimationFrame(this._raf); this.commit(e.currentTarget.dataset.kind, e.currentTarget.dataset.id); }
+    };
+  }
+}
+</script>
+</body>
+</html>
